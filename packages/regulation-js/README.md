@@ -11,7 +11,7 @@ $ npm install -g regulation-js
 ## Usage
 
 ```
-$ regulation-js ./examples/twitter.regu
+$ regulation-js ./examples/twitter.rgl
 module.exports = {
   Entity: /([@＠﹫][a-zA-Z0-9_]{1,16}\/[a-zA-Z0-9]+)|([@＠﹫][a-zA-Z0-9_]{1,16})/,
   User: /[@＠﹫][a-zA-Z0-9_]{1,16}/,

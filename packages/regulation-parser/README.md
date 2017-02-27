@@ -14,7 +14,7 @@ $ npm install -g regulation-parser
 ## Usage
 
 ```
-$ regulation ./examples/twitter.regu
+$ regulation ./examples/twitter.rgl
 {
   "Entity": [
     [
