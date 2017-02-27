@@ -1,0 +1,11 @@
+{
+  "name": "regulation-js",
+  "version": "0.0.0",
+  "description": "Create Javascript regular expressions from Regular lang",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Cameron Hunter <hello@cameronhunter.co.uk>",
+  "license": "MIT"
+}
