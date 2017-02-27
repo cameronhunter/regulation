@@ -1,0 +1,36 @@
+{
+  "name": "regulation-parser",
+  "version": "0.0.0",
+  "description": "Parser for Regulation",
+  "author": "Cameron Hunter <hello@cameronhunter.co.uk>",
+  "license": "MIT",
+  "main": "./build/lib/index.js",
+  "module": "./build/lib/index.mjs",
+  "jsnext:main": "./build/lib/index.mjs",
+  "bin": {
+    "regulation": "./build/bin/index.js"
+  },
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "prebuild": "rm -rf ./build",
+    "build": "npm run build:lib && npm run build:bin",
+    "build:lib": "rollup -c",
+    "build:bin": "babel ./src/bin -d ./build/bin",
+    "postbuild:bin": "chmod +x ./build/bin/*"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "babel-preset-stage-1": "^6.22.0",
+    "babelrc-rollup": "^3.0.0",
+    "rollup": "^0.41.4",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-pegjs": "^2.1.3"
+  },
+  "dependencies": {
+    "commander": "^2.9.0",
+    "dependency-graph": "^0.5.0"
+  }
+}

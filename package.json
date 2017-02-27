@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "scripts": {
+    "postinstall": "lerna bootstrap --hoist",
+    "clean": "lerna clean",
+    "build": "lerna run build",
+    "postbuild": "lerna bootstrap --hoist"
+  },
+  "devDependencies": {
+    "lerna": "2.0.0-beta.37"
+  }
+}

@@ -1,0 +1,20 @@
+Entity
+  = List
+  / User
+  / Hashtag
+  / Cashtag
+
+User
+  = [@＠﹫] Username
+
+Hashtag
+  = [#♯] [a-zA-Z0-9]+
+
+Cashtag
+  = '$' [a-zA-Z]+
+
+List
+  = User '/' [a-zA-Z0-9_-]+
+
+Username
+  = [a-zA-Z0-9_]{1,16}
