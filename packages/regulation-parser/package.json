@@ -1,7 +1,7 @@
 {
   "name": "regulation-parser",
   "version": "0.0.0",
-  "description": "Parser for Regulation",
+  "description": "A parser for Regulation lang",
   "author": "Cameron Hunter <hello@cameronhunter.co.uk>",
   "license": "MIT",
   "main": "./build/lib/index.js",
