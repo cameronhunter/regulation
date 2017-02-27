@@ -7,6 +7,9 @@
   "main": "./build/lib/index.js",
   "module": "./build/lib/index.mjs",
   "jsnext:main": "./build/lib/index.mjs",
+  "bin": {
+    "regulation-js": "./build/bin/index.js"
+  },
   "files": [
     "build"
   ],
