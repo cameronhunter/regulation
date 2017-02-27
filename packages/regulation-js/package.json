@@ -1,6 +1,6 @@
 {
   "name": "regulation-js",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Convert Regulation lang to JavaScript regular expressions",
   "author": "Cameron Hunter <hello@cameronhunter.co.uk>",
   "license": "MIT",
@@ -21,7 +21,7 @@
     "postbuild:bin": "chmod +x ./build/bin/*"
   },
   "dependencies": {
-    "regulation-parser": "^0.0.0"
+    "regulation-parser": "^0.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",
