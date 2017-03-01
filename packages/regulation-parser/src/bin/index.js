@@ -7,7 +7,8 @@ import fs from 'fs';
 
 const execute = (input, options) => {
     const regulation = fs.readFileSync(input, 'utf-8');
-    const output = JSON.stringify(parse(regulation), null, 2);
+    const ast = parse(regulation, { sourceFileName: input });
+    const output = JSON.stringify(ast, null, 2);
 
     if (options.output) {
         fs.writeFileSync(options.output, output, 'utf-8');
