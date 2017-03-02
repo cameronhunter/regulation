@@ -66,7 +66,7 @@ Constraint "Constraint"
   / "{" Space* min:$([0-9]+) Space* "," Space* max:$([1-9][0-9]*) Space* "}"
     { return withSourceLocation(t.sizeConstraint(Number(min), Number(max)), location(), text()) }
 
-Comment
+Comment "Comment"
   = '#' value:$([^\n]*) [\n]
     { return value.trim() }
 
