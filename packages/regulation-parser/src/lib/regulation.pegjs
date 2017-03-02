@@ -1,5 +1,5 @@
 {
-    const { types: { builders: t } } = require('recast');
+    const { builders: t } = require('regulation-ast');
 
     const withSourceLocation = (node, location, source = null) => {
         const loc = t.sourceLocation(
@@ -13,18 +13,11 @@
 }
 
 Regulation "Regulation"
-  = rules:(_ rule:Rule { return rule })* _
+  = rules:(_ comments:Comment* _ rule:Rule { return { ...rule, comments: comments.length ? comments : null } })* _
     {
       return withSourceLocation(
         t.file(
-          withSourceLocation(
-            t.program([
-              ...rules.map(rule => ({ ...t.exportNamedDeclaration(rule, []), loc: rule.loc })),
-              { ...t.exportDefaultDeclaration(rules[0].declarations[0].id), loc: rules[0].loc }
-            ]),
-            location(),
-            text()
-          )
+          withSourceLocation(t.program(rules), location(), text())
         ),
         location(),
         text()
@@ -32,47 +25,50 @@ Regulation "Regulation"
     }
 
 Rule "Rule"
-  = identifier:Identifier _ "=" _ definitions:Definitions
-    {
-      return withSourceLocation(
-        t.variableDeclaration('const', [
-          withSourceLocation(t.variableDeclarator(identifier, definitions), location(), text())
-        ]),
-        location(),
-        text()
-      )
-    }
-
-Definitions "Definitions"
-  = head:Definition tail:(_ "/" _ definition:Definition { return definition; })*
-    { return withSourceLocation(t.sequenceExpression([head, ...tail]), location(), text()) }
+  = identifier:Identifier _ "=" _ head:Definition tail:(_ "/" _ definition:Definition { return definition; })*
+    { return withSourceLocation(t.rule(identifier, [head, ...tail]), location(), text()) }
 
 Definition "Definition"
   = head:Token tail:(Space+ token:Token { return token })*
-    { return withSourceLocation(t.sequenceExpression([head, ...tail]), location(), text()) }
+    { return withSourceLocation(t.definition([head, ...tail]), location(), text()) }
 
 Token "Token"
-  = String
-  / Regex
-  / Identifier
+  = "!" Space* literal:Literal
+    { return withSourceLocation(t.unaryExpression('!', literal), location(), text()) }
+  / Literal
+
+Literal "Literal"
+  = Identifier
+  / String
+  / Match
 
 Identifier "Identifier"
   = name:$([a-z]i+)
     { return withSourceLocation(t.identifier(name), location(), text()) }
 
-Regex "Regex"
-  = pattern:$("[" [^\]]+ "]" "{" Space* length:$([0-9]+) Space* "}")
-    { return withSourceLocation(t.literal(new RegExp(pattern)), location(), text()) } // TODO: Handle constraints
-  / pattern:$("[" [^\]]+ "]" "{" Space* min:$([0-9]+) Space* "," Space* max:$([0-9]+) "}")
-    { return withSourceLocation(t.literal(new RegExp(pattern)), location(), text()) } // TODO: Handle constraints
-  / pattern:$("[" [^\]]+ "]" operator:("+" / "*" / "?")?)
-    { return withSourceLocation(t.literal(new RegExp(pattern)), location(), text()) } // TODO: Handle operators
-
 String "String"
   = "'" value:$([^']+) "'"
-    { return withSourceLocation(t.literal(value), location(), text()) }
+    { return withSourceLocation(t.stringLiteral(value), location(), text()) }
   / '"' value:$([^"]+) '"'
-    { return withSourceLocation(t.literal(value), location(), text()) }
+    { return withSourceLocation(t.stringLiteral(value), location(), text()) }
+
+Match "Match"
+  = "[" pattern:$([^\]]+) "]" constraint:Constraint
+    { return withSourceLocation(t.matchLiteral(pattern, null, constraint), location(), text()) }
+  / "[" pattern:$([^\]]+) "]" operator:("+" / "*" / "?")?
+    { return withSourceLocation(t.matchLiteral(pattern, operator), location(), text()) }
+
+Constraint "Constraint"
+  = "{" Space* size:$([0-9]+) Space* "}"
+    { return withSourceLocation(t.sizeConstraint(Number(size), Number(size)), location(), text()) }
+  / "{" Space* min:$([0-9]+) Space* "," Space* "}"
+    { return withSourceLocation(t.sizeConstraint(Number(min), Infinity), location(), text()) }
+  / "{" Space* min:$([0-9]+) Space* "," Space* max:$([1-9][0-9]*) Space* "}"
+    { return withSourceLocation(t.sizeConstraint(Number(min), Number(max)), location(), text()) }
+
+Comment
+  = '#' value:$([^\n]*) [\n]
+    { return value.trim() }
 
 Space "Space"
   = [ ]

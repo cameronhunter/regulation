@@ -10,11 +10,15 @@ User
 Hashtag
   = [#♯] [a-zA-Z0-9]+
 
+# Used to represent stock symbols
 Cashtag
-  = '$' [a-zA-Z]+
+  = !'$' [a-zA-Z]+
 
 List
-  = User '/' [a-zA-Z0-9_-]+
+  = User '/' Slug
+
+Slug
+  = [a-zA-Z0-9_-]+
 
 Username
   = [a-zA-Z0-9_]{1,16}
